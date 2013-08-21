@@ -11,9 +11,10 @@
 //overall parameters
 centerdisplacement = 40;
 displacement = centerdisplacement / 2;
-screwtest = true;  //are we doing a screw testing step?
-caponly = false;
-bodyonly = true;
+screwtest = false;  //are we doing a screw testing step?
+caponly = true;
+bodyonly = false;
+tolerance = 1.2;
 
 //chamber parameters
 _chamberheight = 27;
@@ -23,7 +24,7 @@ chamberwall = 15;
 chamberinnerheight = chamberheight - 2 * chamberfloors;
 
 //pH probe tower parameters
-pHID = 12.8;
+pHID = 12.5 + tolerance;
 pHIR = pHID / 2;
 pHlip = 1.5;
 pHOR1 = pHIR + pHlip;
@@ -34,7 +35,7 @@ pHthreadheight = 20;
 pHstopheight = pHtowerheight - pHthreadheight;
 
 //septum tower parameters
-spID = 12.8;
+spID = 12.5 + tolerance;
 spIR = spID / 2;
 splip = 3.5;
 spOR = spIR + splip;
@@ -78,7 +79,7 @@ module lift(value){
 
 // screw module
 
-resolution = 30;
+resolution = 20;
 module screw(height, turns, innerdiameter, outerdiameter){
   realturns = turns + 1;
   realheight = (height / turns) * realturns;
@@ -108,17 +109,14 @@ module screw(height, turns, innerdiameter, outerdiameter){
     translate([0,0,height-0.01])
       cylinder(h=deltathread * 2 + 1, r=outerdiameter + 0.1);
 
-    translate([0,0, -deltathread * 2 + 1])
-      cylinder(h=deltathread , r=outerdiameter + 0.1);
+    translate([0,0, -deltathread * 2 - 0.1])
+      cylinder(h=deltathread * 2 + 0.1, r=outerdiameter + 0.1);
   }
 }
 
 
 /////////////////////////////////////////////
 // DEVICE STRUCTURE
-
-
-//screw(10,4,10,11);
 
 //main device body.
 if (!caponly)
@@ -146,11 +144,11 @@ difference(){
     //First, the tower for the pH meter.
     pHtower() lift(chamberheight) {
       cylinder(h=pHtowerheight, r=pHOR1);
-      cylinder(h=pHstopheight, r=pHOR2);
+      cylinder(h=pHstopheight + 0.01, r=pHOR2);
 
       //then create the screw
-      //translate([0,0,pHstopheight])
-      //  screw(pHthreadheight, 5, pHOR1, pHOR1 + 1);
+      translate([0,0,pHstopheight])
+        screw(pHthreadheight, 5, pHOR1, pHOR1 + 1);
     }
 
     if (!screwtest)
@@ -209,12 +207,12 @@ difference(){
   }
   
   translate([0,0,-2])
-    screw(height, 5, pHOR1 + 0.2, pHOR1 + 1.2);
+    screw(height, 5, pHOR1 + tolerance, pHOR1 + 1 + tolerance);
   translate([0,0,-0.1])
-    cylinder(h=height + 0.2, r=pHOR1 + 0.3);  
+    cylinder(h=height + 0.2, r=pHOR1 + tolerance + 0.3);  
 
   translate([0,0,height-0.2])
-    cylinder(h=topthickness + 0.4, r=pHIR);
+    cylinder(h=topthickness + 0.4, r=pHIR + tolerance);
   translate([0,0,height])
-    cylinder(h=topthickness, r1 = pHOR1, r2 = pHIR);
+    cylinder(h=topthickness, r1 = pHOR1 + tolerance, r2 = pHIR + tolerance);
 }
