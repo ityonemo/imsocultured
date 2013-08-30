@@ -11,10 +11,10 @@
 //overall parameters
 centerdisplacement = 40;
 displacement = centerdisplacement / 2;
-screwtest = false;  //are we doing a screw testing step?
-caponly = true;
-bodyonly = false;
-tolerance = 1.2;
+screwtest = true;  //are we doing a screw testing step?
+caponly = false;
+bodyonly = true;
+tolerance = 0.5;
 
 //chamber parameters
 _chamberheight = 27;
@@ -28,7 +28,7 @@ pHID = 12.5 + tolerance;
 pHIR = pHID / 2;
 pHlip = 1.5;
 pHOR1 = pHIR + pHlip;
-pHscrewlip = 4;
+pHscrewlip = 3;
 pHOR2 = pHOR1 + pHscrewlip;
 pHtowerheight = 24;
 pHthreadheight = 20;
