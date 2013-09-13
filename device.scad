@@ -11,7 +11,7 @@
 //overall parameters
 centerdisplacement = 40;
 displacement = centerdisplacement / 2;
-screwtest = true;  //are we doing a screw testing step?
+screwtest = false;  //are we doing a screw testing step?
 caponly = false;
 bodyonly = true;
 tolerance = 0.5;
@@ -193,8 +193,9 @@ difference(){
 
 //cap part.
 topthickness = 3;
-heft = 5;
-height = pHthreadheight;
+heft = 3;
+height = pHthreadheight - 2;
+captolerance = tolerance;
 
 translate([0, 50,0])
 if (!bodyonly)
@@ -207,12 +208,12 @@ difference(){
   }
   
   translate([0,0,-2])
-    screw(height, 5, pHOR1 + tolerance, pHOR1 + 1 + tolerance);
+    screw(pHthreadheight, 5, pHOR1 + captolerance, pHOR1 + 1 + captolerance);
   translate([0,0,-0.1])
-    cylinder(h=height + 0.2, r=pHOR1 + tolerance + 0.3);  
+    cylinder(h=height + 0.2, r=pHOR1 + captolerance + 0.3);  
 
   translate([0,0,height-0.2])
-    cylinder(h=topthickness + 0.4, r=pHIR + tolerance);
+    cylinder(h=topthickness + 2.2, r=pHIR + captolerance);
   translate([0,0,height])
-    cylinder(h=topthickness, r1 = pHOR1 + tolerance, r2 = pHIR + tolerance);
+    cylinder(h=topthickness, r1 = pHOR1 + captolerance, r2 = pHIR + captolerance);
 }
